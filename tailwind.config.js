@@ -9,10 +9,28 @@ module.exports = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        // wave: "url('../images/wave_background.svg')",
+      },
+      width: {
+        480: '30rem',
+        560: '35rem',
+        720: '45rem',
+        '80.0': '80%',
+        '90.0': '90%',
+        '96.0': '96%',
+      },
+      minWidth: {
+        50: '50%',
+      },
+      maxWidth: {
+        80: '80%',
+      },
+      height: {
+        '90.0': '90%',
+        '96.0': '96%',
       },
     },
   },
   plugins: [],
-}
+};
