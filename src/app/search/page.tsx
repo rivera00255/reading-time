@@ -1,10 +1,12 @@
 'use client';
 import BookInfo from '@/components/BookInfo';
+import LibraryBookInfo from '@/components/LibraryBookInfo';
+import LibraryBookInfoModal from '@/components/LibraryBookInfoModal';
 import Pagination from '@/components/Pagination';
-import { Book, SearchRes } from '@/type/search';
+import { SearchRes } from '@/type/search';
 import { fetcherWithAuth } from '@/utilities/fetcher';
 import { useQuery } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const searchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
 export const searchUrl = process.env.NEXT_PUBLIC_SEARCH_URL;
@@ -13,8 +15,8 @@ const Search = () => {
   const searchRef = useRef<HTMLInputElement>(null);
   const options = [
     { value: '', name: '전체검색' },
-    { value: 'title', name: '제목' },
-    { value: 'person', name: '인명' },
+    { value: 'title', name: '표제' },
+    { value: 'person', name: '저자' },
     { value: 'publisher', name: '출판사' },
   ];
 
@@ -24,34 +26,20 @@ const Search = () => {
     target: '',
     query: '',
   });
+  const [popup, setPopup] = useState(false);
 
   let limit = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageBlock, setCurrentPageBlock] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [books, setBooks] = useState<SearchRes>({
     documents: [],
     meta: {
-      is_end: true,
+      is_end: false,
       pageable_count: 0,
       total_count: 0,
     },
   });
-
-  const handlePage = ({
-    is_end,
-    pageable_count,
-    total_count,
-  }: {
-    is_end: boolean;
-    pageable_count: number;
-    total_count: number;
-  }) => {
-    // console.log('handle page...');
-    let page = Math.trunc(pageable_count / limit);
-    let decimal = pageable_count % limit;
-    decimal > 0 ? setTotalPage(page + 1) : setTotalPage(page);
-    // console.log(totalPage);
-  };
 
   const { data } = useQuery(
     ['book', param, currentPage],
@@ -75,6 +63,8 @@ const Search = () => {
   );
 
   const onSubmit = () => {
+    setCurrentPage(1);
+    setCurrentPageBlock(0);
     if (searchRef.current && searchRef.current.value !== '') {
       const query = searchRef.current.value;
       setParam({ target: option, query: query });
@@ -85,8 +75,18 @@ const Search = () => {
     if (e.code === 'Enter') onSubmit();
   };
 
+  useEffect(() => {
+    if (popup) {
+      window.scrollTo(0, 0);
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto';
+    }
+  }, [popup]);
+
   return (
     <main>
+      {popup && <LibraryBookInfoModal param={param.query} popup={popup} setPopup={setPopup} />}
       <section className="container xl mx-auto px-4 my-8">
         <div className="py-8 text-center my-4">
           <p className="mb-2">어떤 책을 읽고 싶나요?</p>
@@ -100,7 +100,7 @@ const Search = () => {
             </select>
             <input
               type="text"
-              placeholder="search book..."
+              placeholder="검색어를 입력하세요."
               className="border rounded px-3 py-2 w-80.0"
               ref={searchRef}
               onKeyUp={(e: any) => onCheckEnter(e)}
@@ -111,18 +111,26 @@ const Search = () => {
           </label>
         </div>
       </section>
-      <section className="container xl mx-auto px-4 my-8">
+      <section className="container xl mx-auto px-4 my-8 min-h-50vh">
+        {books.documents.length < 1 && books.meta.is_end && (
+          <div className="text-zinc-500 text-center">검색 결과가 없습니다.</div>
+        )}
         {books.documents.map((item) => (
           <BookInfo key={item.url} item={item} />
         ))}
         <div className="flex justify-center items-center my-4">
-          <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          <Pagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            currentPageBlock={currentPageBlock}
+            setCurrentPageBlock={setCurrentPageBlock}
+          />
         </div>
       </section>
+      {books.documents.length > 0 && <LibraryBookInfo param={param.query} popup={popup} setPopup={setPopup} />}
     </main>
   );
 };
-
-// const styledButton = 'border m-1 rounded px-2';
 
 export default Search;

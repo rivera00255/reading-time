@@ -4,14 +4,18 @@ const Pagination = ({
   totalPage,
   currentPage,
   setCurrentPage,
+  currentPageBlock,
+  setCurrentPageBlock,
 }: {
   totalPage: number;
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPageBlock: number;
+  setCurrentPageBlock: Dispatch<SetStateAction<number>>;
 }) => {
   //   console.log(totalPage);
   const pageLimit = 5;
-  const [currentPageBlock, setCurrentPageBlock] = useState(0);
+  //   const [currentPageBlock, setCurrentPageBlock] = useState(0);
   const pageOffset = currentPageBlock * pageLimit;
   //   console.log(currentPageBlock);
 
@@ -39,7 +43,7 @@ const Pagination = ({
   return (
     <div>
       <button
-        className="border m-1 rounded px-2 disabled:opacity-0"
+        className="border m-1 rounded px-2 text-sm disabled:hidden"
         onClick={() => {
           setCurrentPage(1);
           setCurrentPageBlock(0);
@@ -48,14 +52,14 @@ const Pagination = ({
         &lt;&lt;
       </button>
       <button
-        className="border m-1 rounded px-2 disabled:opacity-0"
+        className="border m-1 rounded px-2 text-sm disabled:hidden"
         onClick={() => prev()}
         disabled={currentPage === 1}>
         &lt;
       </button>
       {perPage.map((i) => (
         <button
-          className={`border m-1 rounded px-2 data-[index]:bg-amber-100`}
+          className={`border m-1 rounded px-2 text-sm data-[index]:bg-amber-100`}
           key={i}
           onClick={() => {
             setCurrentPage(i);
@@ -80,13 +84,13 @@ const Pagination = ({
           </button>
         ))} */}
       <button
-        className="border m-1 rounded px-2 disabled:opacity-0"
+        className="border m-1 rounded px-2 text-sm disabled:hidden"
         onClick={() => next()}
         disabled={currentPage === totalPage || totalPage === 1}>
         &gt;
       </button>
       <button
-        className="border m-1 rounded px-2 disabled:opacity-0"
+        className="border m-1 rounded px-2 text-sm disabled:hidden"
         onClick={() => {
           setCurrentPage(totalPage);
           setCurrentPageBlock(Math.ceil(totalPage / pageLimit) - 1);

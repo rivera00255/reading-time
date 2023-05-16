@@ -2,10 +2,10 @@ import { LibraryRes } from '@/type/library';
 import { fetcher } from '@/utilities/fetcher';
 import Link from 'next/link';
 
-export default async function Home() {
-  const libraryApiKey = process.env.NEXT_PUBLIC_LIBRARY_API_KEY;
-  const libraryUrl = process.env.NEXT_PUBLIC_LIBRARY_URL;
+export const libraryApiKey = process.env.NEXT_PUBLIC_LIBRARY_API_KEY;
+export const libraryUrl = process.env.NEXT_PUBLIC_LIBRARY_URL;
 
+export default async function Home() {
   const data: LibraryRes = await fetcher(
     'GET',
     `${libraryUrl}${libraryApiKey}/json/SeoulLibraryBookRentNumInfo/1/20`,
