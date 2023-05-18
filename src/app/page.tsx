@@ -12,7 +12,7 @@ export default async function Home() {
     undefined,
     'no-store'
   );
-  const bookRentBest = data.SeoulLibraryBookRentNumInfo.row;
+  const bookRentBest = data.SeoulLibraryBookRentNumInfo?.row;
 
   return (
     <main>
@@ -26,7 +26,7 @@ export default async function Home() {
       <section className="container xl mx-auto px-4">
         <h3 className="text-xl">인기 대출도서</h3>
         <h4 className="mb-8 text-xs">서울 도서관 인기대출 도서 목록</h4>
-        {bookRentBest.map((item) => (
+        {bookRentBest?.map((item) => (
           <div key={item.ISBN} className="bg-amber-50 mb-2 rounded px-8 py-4 drop-shadow-sm">
             <p>
               <strong>{item.TITLE}</strong>

@@ -10,7 +10,7 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        // wave: "url('../images/wave_background.svg')",
+        // wave: "url('/public/images/wave_background.svg')",
       },
       width: {
         480: '30rem',

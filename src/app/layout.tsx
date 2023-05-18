@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { Noto_Sans_KR } from 'next/font/google';
 import Footer from '@/components/Footer';
 import Provider from '@/lib/Provider';
+import CommonLayout from '@/components/CommonLayout';
 
 const notoSans = Noto_Sans_KR({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] });
 
@@ -15,9 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={notoSans.className}>
-        <Header />
+        <CommonLayout>{children}</CommonLayout>
+        {/* <Header />
         <Provider>{children}</Provider>
-        <Footer />
+        <Footer /> */}
       </body>
     </html>
   );

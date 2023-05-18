@@ -21,7 +21,7 @@ const LibraryBookInfo = ({
   // console.log(searchResult);
   // console.log(offset);
 
-  const { data } = useQuery(
+  const { data, isLoading } = useQuery(
     ['library', param, offset],
     async () => {
       const response = await fetcher(
@@ -52,7 +52,7 @@ const LibraryBookInfo = ({
       setOffset(5);
       setLastPage(0);
     }
-  }, [lastPage, popup]);
+  }, [popup, lastPage]);
 
   return (
     <section className="container xl mx-auto px-4 my-8">
