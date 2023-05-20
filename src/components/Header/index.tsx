@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import WaveBackground from '/public/images/wave_background.svg';
+import Navigation from '../Navigation';
 
 const Header = () => {
   return (
@@ -10,9 +11,7 @@ const Header = () => {
         <h1 className="text-center font-mono font-bold text-lg">
           <Link href="/">Reading Time</Link>
         </h1>
-        <Link href="./login" className="absolute top-4 right-2">
-          <button className="text-zinc-500 p-1 text-sm drop-shadow-sm hover:text-zinc-400">로그인</button>
-        </Link>
+        <Navigation />
       </nav>
     </header>
   );
