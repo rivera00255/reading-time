@@ -1,9 +1,28 @@
 'use client';
 import useAuth from '@/hooks/useAuth';
+import { supabase } from '@/lib/Supabase/supabaseClient';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const MyPage = () => {
+  const router = useRouter();
   const { loading, auth } = useAuth();
+  const [report, setReport] = useState<{ [key: string]: any }[]>([]);
+
+  const getBookReport = async () => {
+    const { data, error } = await supabase
+      .from('bookreport')
+      .select('id, title, createdAt')
+      .order('createdAt', { ascending: false });
+    // console.log(data);
+    // console.log(error);
+    if (data) setReport(data);
+  };
+
+  useEffect(() => {
+    getBookReport();
+  }, []);
 
   if (loading)
     return <div className="container xl mx-auto px-4 min-h-50vh flex justify-center items-center">Loading...</div>;
@@ -21,10 +40,25 @@ const MyPage = () => {
   return (
     <main>
       <section className="container xl mx-auto px-4 mt-8 mb-12">
-        <Link href="../bookreport">
-          <button>독후감 작성하기</button>
-        </Link>
-        <div>나의 독후감들</div>
+        <div className="flex items-center justify-center my-8">
+          <button className="bg-violet-400 py-2 px-4 rounded text-sm text-white hover:bg-violet-300">
+            <Link href="../bookreport">독후감 작성하기</Link>
+          </button>
+        </div>
+        <div className="min-h-50vh">
+          {report.length > 0 &&
+            report.map((item) => (
+              <div
+                key={item.id}
+                className="bg-violet-50 py-4 px-8 rounded drop-shadow mb-4 flex items-center justify-between hover:bg-violet-100"
+                onClick={() => {
+                  router.push(`../mypage/report/${item.id}`);
+                }}>
+                <p>{item.title}</p>
+                <p className="text-xs">{new Date(item.createdAt).toLocaleDateString()}</p>
+              </div>
+            ))}
+        </div>
       </section>
     </main>
   );
