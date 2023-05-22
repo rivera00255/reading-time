@@ -1,12 +1,15 @@
 'use client';
 import { supabase } from '@/lib/Supabase/supabaseClient';
+import { create } from '@/store/slices/notifySlice';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -23,7 +26,8 @@ const Login = () => {
       }
       console.log(data);
       router.replace('/');
-      alert('로그인되었습니다.');
+      // alert('로그인되었습니다.');
+      dispatch(create({ message: '로그인되었습니다.' }));
     } catch (e) {
       console.log(e);
     }

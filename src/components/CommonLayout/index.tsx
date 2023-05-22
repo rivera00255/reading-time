@@ -1,19 +1,13 @@
 'use client';
-import { useSelectedLayoutSegment } from 'next/navigation';
-import Header from '../Header';
-import Provider from '@/lib/Provider';
-import Footer from '../Footer';
+import QueryProvider from '@/lib/Provider';
+import { Provider } from 'react-redux';
+import store from '@/store';
 
 const CommonLayout = ({ children }: { children: React.ReactNode }) => {
-  const segment = useSelectedLayoutSegment();
-
-  if (segment === 'login') return <Provider>{children}</Provider>;
   return (
-    <>
-      <Header />
-      <Provider>{children}</Provider>
-      <Footer />
-    </>
+    <Provider store={store}>
+      <QueryProvider>{children}</QueryProvider>
+    </Provider>
   );
 };
 

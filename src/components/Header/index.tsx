@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import WaveBackground from '/public/images/wave_background.svg';

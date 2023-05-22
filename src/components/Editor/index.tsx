@@ -6,9 +6,12 @@ import { useRef } from 'react';
 import { Editor } from '@/lib/ToastEditor';
 import { supabase } from '@/lib/Supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { create } from '@/store/slices/notifySlice';
 
 const ReportEditor = ({ user, bookReport }: { user: string; bookReport?: { [key: string]: any } }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
@@ -20,17 +23,17 @@ const ReportEditor = ({ user, bookReport }: { user: string; bookReport?: { [key:
 
   const createReport = async (report: { [key: string]: any }) => {
     const { error } = await supabase.from('bookreport').insert(report);
-    if (!error) alert('작성 완료되었습니다.');
+    if (!error) dispatch(create({ message: '작성 완료.' }));
   };
 
   const updateReport = async (report: { [key: string]: any }) => {
     const { error } = await supabase.from('bookreport').update(report).eq('id', report.id);
-    if (!error) alert('수정 완료되었습니다.');
+    if (!error) dispatch(create({ message: '수정 완료.' }));
   };
 
   const deleteReport = async (id: number) => {
     const { error } = await supabase.from('bookreport').delete().eq('id', id);
-    if (!error) console.log('삭제 완료');
+    if (!error) dispatch(create({ message: '삭제 완료.' }));
     router.push('../mypage');
   };
 
