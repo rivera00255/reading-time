@@ -1,6 +1,7 @@
 'use client';
 import useAuth from '@/hooks/useAuth';
 import { supabase } from '@/lib/Supabase/supabaseClient';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,20 +10,39 @@ const MyPage = () => {
   const router = useRouter();
   const { loading, auth } = useAuth();
   const [report, setReport] = useState<{ [key: string]: any }[]>([]);
+  const [profile, setProfile] = useState('');
 
-  const getBookReport = async () => {
+  const getBookReport = async (user: string) => {
     const { data, error } = await supabase
       .from('bookreport')
       .select('id, title, createdAt')
+      .eq('user', `${user}`)
       .order('createdAt', { ascending: false });
     // console.log(data);
     // console.log(error);
     if (data) setReport(data);
   };
 
+  const getProfile = async (id: string) => {
+    try {
+      const { data, error } = await supabase.storage.from('profile').list(`${id}`, {
+        search: 'profile',
+      });
+      if (data && data.length > 0) {
+        const { data } = supabase.storage.from('profile').getPublicUrl(`${id}/profile`);
+        data && setProfile(data.publicUrl);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    getBookReport();
-  }, []);
+    if (!loading && auth) {
+      getBookReport(auth.user.email ?? '');
+      getProfile(auth.user.id);
+    }
+  }, [loading, auth]);
 
   if (loading)
     return <div className="container xl mx-auto px-4 min-h-50vh flex justify-center items-center">Loading...</div>;
@@ -40,6 +60,13 @@ const MyPage = () => {
   return (
     <main>
       <section className="container xl mx-auto px-4 mt-8 mb-12">
+        <div className="flex items-center justify-center my-5">
+          <Link href="../mypage/profile">
+            <div className="w-24 h-24 bg-violet-200 rounded-full drop-shadow-sm overflow-hidden">
+              {profile !== '' && <Image src={profile} alt="profile" fill={true} sizes="100%" />}
+            </div>
+          </Link>
+        </div>
         <div className="flex items-center justify-center my-8">
           <button className="bg-violet-400 py-2 px-4 rounded text-sm text-white hover:bg-violet-300">
             <Link href="../bookreport">독후감 작성하기</Link>
