@@ -24,7 +24,12 @@ const Login = () => {
         alert(error);
         return;
       }
-      console.log(data);
+      if (data.user?.user_metadata.status === false) {
+        alert('탈퇴한 계정입니다. 다른 계정으로 다시 회원가입한 후 이용해주세요.');
+        const { error } = await supabase.auth.signOut();
+        return;
+      }
+      // console.log(data);
       router.replace('/');
       // alert('로그인되었습니다.');
       dispatch(create({ message: '로그인되었습니다.' }));
@@ -35,7 +40,7 @@ const Login = () => {
 
   const handleSignup = async ({ email, password }: { email: string; password: string }) => {
     try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { status: true } } });
       if (error) {
         alert(error);
         return;
