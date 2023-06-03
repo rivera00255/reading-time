@@ -2,8 +2,8 @@ import { LibraryRes } from '@/type/library';
 import { fetcher } from '@/utilities/fetcher';
 import Link from 'next/link';
 
-export const libraryApiKey = process.env.NEXT_PUBLIC_LIBRARY_API_KEY;
-export const libraryUrl = process.env.NEXT_PUBLIC_LIBRARY_URL;
+const libraryApiKey = process.env.NEXT_PUBLIC_LIBRARY_API_KEY;
+const libraryUrl = process.env.NEXT_PUBLIC_LIBRARY_URL;
 
 export default async function Home() {
   const data: LibraryRes = await fetcher(

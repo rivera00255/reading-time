@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import notifySlice from './slices/notifySlice';
+import searchSlice from './slices/searchSlice';
 
 const rootReducer = combineReducers({
   notify: notifySlice,
+  search: searchSlice,
 });
 
 const store = configureStore({

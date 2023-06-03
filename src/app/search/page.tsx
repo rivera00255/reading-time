@@ -8,8 +8,8 @@ import { fetcherWithAuth } from '@/utilities/fetcher';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
-export const searchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
-export const searchUrl = process.env.NEXT_PUBLIC_SEARCH_URL;
+const searchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
+const searchUrl = process.env.NEXT_PUBLIC_SEARCH_URL;
 
 const Search = () => {
   const searchRef = useRef<HTMLInputElement>(null);

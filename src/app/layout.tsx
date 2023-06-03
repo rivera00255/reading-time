@@ -1,9 +1,9 @@
 import '../styles/globals.css';
-import { Noto_Sans_KR } from 'next/font/google';
+// import { Noto_Sans_KR } from 'next/font/google';
 import CommonLayout from '@/components/CommonLayout';
 import SelectedLayout from '@/components/SelectedLayout';
 
-const notoSans = Noto_Sans_KR({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] });
+// const notoSans = Noto_Sans_KR({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] });
 
 export const metadata = {
   title: 'Reading Time',
@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={notoSans.className}>
+      <body>
         <CommonLayout>
           <SelectedLayout>{children}</SelectedLayout>
         </CommonLayout>
