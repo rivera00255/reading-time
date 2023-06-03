@@ -1,8 +1,13 @@
-import { libraryApiKey, libraryUrl } from '@/app/page';
+import { RootState } from '@/store';
+import { reset, set } from '@/store/slices/searchSlice';
 import { BookRent } from '@/type/library';
 import { fetcher } from '@/utilities/fetcher';
 import { useQuery } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+const libraryApiKey = process.env.NEXT_PUBLIC_LIBRARY_API_KEY;
+const libraryUrl = process.env.NEXT_PUBLIC_LIBRARY_URL;
 
 const LibraryBookInfo = ({
   param,
@@ -17,9 +22,13 @@ const LibraryBookInfo = ({
   const [lastPage, setLastPage] = useState(0);
   const [searchResult, setSearchResult] = useState({ CODE: '', MESSAGE: '' });
   const [bookInfo, setBookInfo] = useState<BookRent[]>([]);
+
+  const dispatch = useDispatch();
+  const searchBookResult = useSelector((state: RootState) => state.search);
   // console.log(lastPage);
   // console.log(searchResult);
   // console.log(offset);
+  // console.log(searchBookResult.pageResult);
 
   const { data, isLoading } = useQuery(
     ['library', param, offset],
@@ -36,6 +45,9 @@ const LibraryBookInfo = ({
         setSearchResult(response.SeoulLibraryBookSearchInfo.RESULT);
         setBookInfo(response.SeoulLibraryBookSearchInfo.row);
         setLastPage(response.SeoulLibraryBookSearchInfo.list_total_count);
+        !popup
+          ? dispatch(set({ pageResult: response.SeoulLibraryBookSearchInfo.list_total_count }))
+          : dispatch(reset());
       } else {
         setSearchResult(response.RESULT);
       }
@@ -47,12 +59,13 @@ const LibraryBookInfo = ({
 
   useEffect(() => {
     if (popup) {
+      searchBookResult.pageResult !== 0 && setOffset(searchBookResult.pageResult);
       lastPage !== 0 && setOffset(lastPage);
     } else {
       setOffset(5);
       setLastPage(0);
     }
-  }, [popup, lastPage]);
+  }, [lastPage, popup, searchBookResult.pageResult]);
 
   return (
     <section className="container xl mx-auto px-4 my-8">

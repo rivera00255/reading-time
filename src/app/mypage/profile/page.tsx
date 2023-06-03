@@ -18,7 +18,8 @@ const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [file, setFile] = useState({ url: '', file: new Blob() });
-  // console.log(imageUrl);
+  // console.log(imageUrl.indexOf(`${userId}/profile`));
+  // console.log(imageUrl.slice(74));
 
   const {
     register,
@@ -41,13 +42,22 @@ const Profile = () => {
 
   const getProfile = async (id: string) => {
     try {
+      let filename = '';
       const { data, error } = await supabase.storage.from('profile').list(`${id}`, {
         search: 'profile',
       });
       if (data && data.length > 0) {
-        const { data } = supabase.storage.from('profile').getPublicUrl(`${id}/profile`);
-        data && setImageUrl(data.publicUrl);
+        filename = data[data.length - 1].name;
+        const { data: image } = supabase.storage.from('profile').getPublicUrl(`${id}/${filename}`);
+        image && setImageUrl(image.publicUrl);
       }
+      // const { data, error } = await supabase.storage.from('profile').list(`${id}`, {
+      //   search: 'profile',
+      // });
+      // if (data && data.length > 0) {
+      //   const { data } = supabase.storage.from('profile').getPublicUrl(`${id}/profile`);
+      //   data && setImageUrl(data.publicUrl);
+      // }
     } catch (e) {
       console.log(e);
     }
@@ -61,15 +71,27 @@ const Profile = () => {
     }
   };
 
+  const deleteProfile = async (imageUrl: string) => {
+    const { data, error } = await supabase.storage
+      .from('profile')
+      .remove([`${imageUrl.slice(imageUrl.indexOf(`${userId}/profile`))}`]);
+    // console.log(data);
+    if (!error) setImageUrl('');
+    // dispatch(create({ message: '프로필 이미지가 삭제되었습니다.' }));
+  };
+
   const editProfile = async () => {
     if (file.url !== '') {
-      const { data, error } = await supabase.storage.from('profile').upload(`${userId}/profile`, file.file, {
-        upsert: true,
-      });
-      //   console.log(data);
+      imageUrl !== '' && deleteProfile(imageUrl);
+      const { data, error } = await supabase.storage
+        .from('profile')
+        .upload(`${userId}/profile${new Date().getTime()}`, file.file);
+      // console.log(data?.path?.split('/')[1]);
       if (data) {
         URL.revokeObjectURL(file.url);
-        const { data: profileImage } = supabase.storage.from('profile').getPublicUrl(`${userId}/profile`);
+        const { data: profileImage } = supabase.storage
+          .from('profile')
+          .getPublicUrl(`${userId}/${data.path.split('/')[1]}`);
         if (profileImage) {
           setImageUrl(profileImage.publicUrl);
           setFile({ url: '', file: new Blob() });
@@ -77,12 +99,6 @@ const Profile = () => {
         }
       }
     }
-  };
-
-  const deleteProfile = async () => {
-    const { data, error } = await supabase.storage.from('profile').remove([`${userId}/profile`]);
-    if (!error) setImageUrl('');
-    dispatch(create({ message: '프로필 이미지가 삭제되었습니다.' }));
   };
 
   const deleteUser = async (id: string) => {
@@ -122,7 +138,7 @@ const Profile = () => {
                     setFile({ url: '', file: new Blob() });
                     return;
                   } else {
-                    if (imageUrl !== '') deleteProfile();
+                    if (imageUrl !== '') deleteProfile(imageUrl);
                   }
                 }}>
                 ✕

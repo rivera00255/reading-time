@@ -25,12 +25,14 @@ const MyPage = () => {
 
   const getProfile = async (id: string) => {
     try {
+      let filename = '';
       const { data, error } = await supabase.storage.from('profile').list(`${id}`, {
         search: 'profile',
       });
       if (data && data.length > 0) {
-        const { data } = supabase.storage.from('profile').getPublicUrl(`${id}/profile`);
-        data && setProfile(data.publicUrl);
+        filename = data[data.length - 1].name;
+        const { data: image } = supabase.storage.from('profile').getPublicUrl(`${id}/${filename}`);
+        image && setProfile(image.publicUrl);
       }
     } catch (e) {
       console.log(e);

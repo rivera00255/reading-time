@@ -23,12 +23,18 @@ const ReportEditor = ({ user, bookReport }: { user: string; bookReport?: { [key:
 
   const createReport = async (report: { [key: string]: any }) => {
     const { error } = await supabase.from('bookreport').insert(report);
-    if (!error) dispatch(create({ message: '작성 완료.' }));
+    if (!error) {
+      dispatch(create({ message: '작성 완료.' }));
+      router.push('../mypage');
+    }
   };
 
   const updateReport = async (report: { [key: string]: any }) => {
     const { error } = await supabase.from('bookreport').update(report).eq('id', report.id);
-    if (!error) dispatch(create({ message: '수정 완료.' }));
+    if (!error) {
+      dispatch(create({ message: '수정 완료.' }));
+      router.push('../mypage');
+    }
   };
 
   const deleteReport = async (id: number) => {
@@ -55,7 +61,6 @@ const ReportEditor = ({ user, bookReport }: { user: string; bookReport?: { [key:
           !bookReport
             ? createReport({ title, author, publisher, report, user })
             : updateReport({ title, author, publisher, report, user, id });
-          router.push('../mypage');
         } catch (e) {
           console.log(e);
         }
