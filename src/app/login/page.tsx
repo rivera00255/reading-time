@@ -21,11 +21,11 @@ const Login = () => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        alert(error);
+        if (typeof window !== 'undefined') alert(error);
         return;
       }
       if (data.user?.user_metadata.status === false) {
-        alert('탈퇴한 계정입니다. 다른 계정으로 다시 회원가입한 후 이용해주세요.');
+        if (typeof window !== 'undefined') alert('탈퇴한 계정입니다. 다른 계정으로 다시 회원가입한 후 이용해주세요.');
         const { error } = await supabase.auth.signOut();
         return;
       }
@@ -42,11 +42,11 @@ const Login = () => {
     try {
       const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { status: true } } });
       if (error) {
-        alert(error);
+        if (typeof window !== 'undefined') alert(error);
         return;
       }
       console.log(data);
-      alert('회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.');
+      dispatch(create({ message: '회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.' }));
     } catch (e) {
       console.log(e);
     }

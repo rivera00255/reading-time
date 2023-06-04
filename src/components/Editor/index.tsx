@@ -65,7 +65,7 @@ const ReportEditor = ({ user, bookReport }: { user: string; bookReport?: { [key:
           console.log(e);
         }
       } else {
-        alert('내용을 작성해주세요.');
+        if (typeof window !== 'undefined') alert('내용을 작성해주세요.');
       }
     }
   };
