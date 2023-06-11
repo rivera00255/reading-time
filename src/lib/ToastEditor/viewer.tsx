@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Viewer, { EventMap } from '@toast-ui/editor/dist/toastui-editor-viewer';
 import { ViewerProps, EventNames } from './index.d';

@@ -1,3 +1,4 @@
+'use client';
 import { RootState } from '@/store';
 import { reset, set } from '@/store/slices/searchSlice';
 import { BookRent } from '@/type/library';

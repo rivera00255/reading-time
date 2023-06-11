@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import Editor, { EventMap } from '@toast-ui/editor';
 import type { EditorProps, EventNames } from './index.d';

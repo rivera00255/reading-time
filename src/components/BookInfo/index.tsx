@@ -1,3 +1,4 @@
+'use client';
 import { Book } from '@/type/search';
 import Image from 'next/image';
 
