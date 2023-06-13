@@ -5,7 +5,10 @@ import Footer from '../Footer';
 import Notifications from '../Notifications';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import AuthProvider from '@/lib/Supabase/AuthProvider';
+import dynamic from 'next/dynamic';
+// import AuthProvider from '@/lib/Supabase/AuthProvider';
+
+const AuthProvider = dynamic(() => import('@/lib/Supabase/AuthProvider'));
 
 const SelectedLayout = ({ children }: { children: React.ReactNode }) => {
   const segment = useSelectedLayoutSegment();

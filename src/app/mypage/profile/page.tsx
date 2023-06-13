@@ -121,7 +121,7 @@ const Profile = () => {
     userId !== '' && getProfile(userId);
   }, [userId]);
 
-  if (!auth) return <NotFound />;
+  // if (!auth) return <NotFound />;
   return (
     <main>
       <section className="container xl mx-auto px-4 mt-8 mb-12 min-h-50vh">

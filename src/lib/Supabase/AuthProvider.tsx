@@ -7,16 +7,16 @@ import { useRouter } from 'next/navigation';
 export const AuthContext = createContext<Session | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
-
-  //   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState<Session | null>(null);
+
+  const router = useRouter();
 
   const getAuth = async () => {
     const { data, error } = await supabase.auth.getSession();
     if (data) {
       setAuth(data.session);
-      //   setLoading(false);
+      setLoading(false);
     }
     // if (!loading) !auth && router.push('/');
   };
@@ -24,6 +24,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     getAuth();
   }, []);
+
+  useEffect(() => {
+    if (!loading) !auth && router.push('/');
+  }, [auth, loading]);
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };

@@ -24,12 +24,12 @@ const Edit = () => {
     getReport();
   }, []);
 
-  if (!auth) return <NotFound />;
+  // if (!auth) return <NotFound />;
   return (
     <main>
-      <section className="container xl mx-auto px-4 mt-8 mb-12">
+      <div className="container xl mx-auto px-4 mt-8 mb-12">
         {report && <ReportEditor user={auth?.user.email ?? ''} bookReport={report} />}
-      </section>
+      </div>
     </main>
   );
 };
