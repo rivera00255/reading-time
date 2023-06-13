@@ -1,14 +1,16 @@
 'use client';
 import useAuth from '@/hooks/useAuth';
+import { AuthContext } from '@/lib/Supabase/AuthProvider';
 import { supabase } from '@/lib/Supabase/supabaseClient';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 const MyPage = () => {
   const router = useRouter();
-  const { loading, auth } = useAuth();
+  // const { loading, auth } = useAuth();
+  const auth = useContext(AuthContext);
   const [report, setReport] = useState<{ [key: string]: any }[]>([]);
   const [profile, setProfile] = useState('');
 
@@ -40,14 +42,14 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    if (!loading && auth) {
+    if (auth) {
       getBookReport(auth.user.email ?? '');
       getProfile(auth.user.id);
     }
-  }, [loading, auth]);
+  }, [auth]);
 
-  if (loading)
-    return <div className="container xl mx-auto px-4 min-h-50vh flex justify-center items-center">Loading...</div>;
+  // if (loading)
+  //   return <div className="container xl mx-auto px-4 min-h-50vh flex justify-center items-center">Loading...</div>;
   if (!auth)
     return (
       <div className="container xl mx-auto px-4 min-h-50vh flex justify-center items-center">

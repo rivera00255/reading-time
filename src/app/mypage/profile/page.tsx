@@ -1,16 +1,18 @@
 'use client';
 import NotFound from '@/components/NotFound';
 import useAuth from '@/hooks/useAuth';
+import { AuthContext } from '@/lib/Supabase/AuthProvider';
 import { supabase } from '@/lib/Supabase/supabaseClient';
 import { create } from '@/store/slices/notifySlice';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 const Profile = () => {
-  const { loading, auth } = useAuth();
+  // const { loading, auth } = useAuth();
+  const auth = useContext(AuthContext);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -119,6 +121,7 @@ const Profile = () => {
     userId !== '' && getProfile(userId);
   }, [userId]);
 
+  if (!auth) return <NotFound />;
   return (
     <main>
       <section className="container xl mx-auto px-4 mt-8 mb-12 min-h-50vh">

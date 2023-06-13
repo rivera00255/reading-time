@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import Notifications from '../Notifications';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import AuthProvider from '@/lib/Supabase/AuthProvider';
 
 const SelectedLayout = ({ children }: { children: React.ReactNode }) => {
   const segment = useSelectedLayoutSegment();
@@ -18,12 +19,12 @@ const SelectedLayout = ({ children }: { children: React.ReactNode }) => {
       </>
     );
   return (
-    <>
+    <AuthProvider>
       <Header />
       {notification.isNotify && <Notifications />}
       {children}
       <Footer />
-    </>
+    </AuthProvider>
   );
 };
 
