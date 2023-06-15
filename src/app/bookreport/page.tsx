@@ -1,7 +1,13 @@
 'use client';
-import ReportEditor from '@/components/Editor';
+// import ReportEditor from '@/components/Editor';
 import { AuthContext } from '@/lib/Supabase/AuthProvider';
+import dynamic from 'next/dynamic';
 import { useContext } from 'react';
+
+const ReportEditor = dynamic(() => import('@/components/Editor'), {
+  loading: () => <div>Loading...</div>,
+  ssr: false,
+});
 
 const BookReport = () => {
   // const { loading, auth } = useAuth();
