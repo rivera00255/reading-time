@@ -8,6 +8,10 @@ import SelectedLayout from '@/components/SelectedLayout';
 export const metadata = {
   title: 'Reading Time',
   description: 'What do you want to read?',
+  other: {
+    'http-equiv': 'Content-Security-Policy',
+    content: 'upgrade-insecure-requests',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
